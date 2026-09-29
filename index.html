@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Alisson ❤️ Anna - Nosso Primeiro Capítulo</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        romantic: {
+                            dark: '#0a050f',
+                            card: '#160b22',
+                            cardHover: '#221136',
+                            wine: '#831843',
+                            purpleAccent: '#a855f7',
+                            pinkGlow: '#ec4899',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'glow': 'glow 3s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px) scale(1)' },
+                            '50%': { transform: 'translateY(-12px) scale(1.05)' },
+                        },
+                        glow: {
+                            '0%': { opacity: '0.4', filter: 'brightness(1)' },
+                            '100%': { opacity: '0.8', filter: 'brightness(1.3)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #07030c;
+            color: #f3e8ff;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .font-romantic {
+            font-family: 'Playfair Display', serif;
+        }
+        .font-script {
+            font-family: 'Great Vibes', cursive;
+        }
+        .glass-panel {
+            background: rgba(22, 11, 34, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+        }
+        .glass-button {
+            background: linear-gradient(135deg, rgba(131, 24, 67, 0.4), rgba(168, 85, 247, 0.2));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(236, 72, 153, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-button:hover {
+            background: linear-gradient(135deg, rgba(131, 24, 67, 0.7), rgba(168, 85, 247, 0.4));
+            border-color: rgba(236, 72, 153, 0.6);
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
+            transform: translateY(-2px);
+        }
+        .heart-particle {
+            position: absolute;
+            pointer-events: none;
+            animation: floatUp linear forwards;
+            opacity: 0.6;
+            z-index: 1;
+        }
+        @keyframes floatUp {
+            0% {
+                transform: translateY(105vh) scale(0.5) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% {
+                transform: translateY(-10vh) scale(1.2) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(10, 5, 15, 0.5);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(168, 85, 247, 0.3);
+            border-radius: 4px;
+        }
+        .glow-text {
+            text-shadow: 0 0 15px rgba(236, 72, 153, 0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between relative select-none custom-scrollbar">
+
+    <!-- Background Ambient Glows -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div class="absolute -top-40 -left-40 w-96 h-96 bg-purple-900/20 rounded-full blur-[120px] animate-pulse-slow"></div>
+        <div class="absolute top-1/2 -right-40 w-96 h-96 bg-rose-900/20 rounded-full blur-[120px] animate-pulse-slow" style="animation-delay: 2s;"></div>
+        <div class="absolute -bottom-40 left-1/3 w-96 h-96 bg-indigo-900/20 rounded-full blur-[120px] animate-pulse-slow" style="animation-delay: 4s;"></div>
+    </div>
+
+    <!-- Floating Hearts Container -->
+    <div id="hearts-container" class="fixed inset-0 pointer-events-none overflow-hidden z-0"></div>
+
+    <!-- Background Music Controller -->
+    <div class="fixed top-4 right-4 z-50 flex items-center gap-2">
+        <button id="music-toggle-btn" onclick="toggleMusic()" class="glass-button px-3 py-2 rounded-full text-xs font-medium text-pink-200 flex items-center gap-2 shadow-lg">
+            <i id="music-icon" class="fa-solid fa-music text-pink-400 animate-bounce"></i>
+            <span id="music-text">Música: Off</span>
+        </button>
+    </div>
+    
+    <!-- Hidden Audio Synthesizer/Player (Soft Romantic Chords via Web Audio API) -->
+    <audio id="bg-audio" loop preload="auto">
+        <!-- Royalty-free calming romantic piano tune or fallback audio -->
+        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf756.mp3?filename=romantic-钢琴-112157.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="fixed inset-0 bg-romantic-dark z-50 flex flex-col items-center justify-center transition-opacity duration-700">
+        <div class="w-20 h-20 relative flex items-center justify-center animate-pulse">
+            <i class="fa-solid fa-heart text-rose-500 text-5xl glow-text"></i>
+        </div>
+        <h2 class="font-romantic text-2xl text-pink-200 mt-4 tracking-wide">Alisson & Anna</h2>
+        <p class="text-xs text-purple-300/60 mt-1 uppercase tracking-widest">Carregando nossa história...</p>
+        <div class="w-32 h-1 bg-purple-900/50 rounded-full mt-6 overflow-hidden">
+            <div id="loading-bar" class="h-full bg-gradient-to-r from-rose-500 to-purple-500 w-0 transition-all duration-700"></div>
+        </div>
+    </div>
+
+    <!-- Custom Modal for Alerts/Messages -->
+    <div id="custom-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="glass-panel max-w-sm w-full p-6 rounded-2xl text-center shadow-2xl border border-pink-500/30 transform scale-95 transition-transform duration-300" id="modal-content-box">
+            <div class="w-12 h-12 bg-rose-500/20 rounded-full flex items-center justify-center mx-auto mb-4 text-rose-400 text-xl">
+                <i class="fa-solid fa-heart"></i>
+            </div>
+            <h3 id="modal-title" class="font-romantic text-xl text-white mb-2">Mensagem</h3>
+            <p id="modal-message" class="text-sm text-purple-200/80 mb-6 leading-relaxed">Texto da mensagem aqui.</p>
+            <button onclick="closeModal()" class="w-full py-3 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white font-medium rounded-xl shadow-lg shadow-rose-900/30 transition-all">
+                Entendido ❤️
+            </button>
+        </div>
+    </div>
+
+    <main class="flex-grow flex flex-col relative z-10 w-full max-w-md mx-auto px-4 py-8 justify-between">
+
+        <!-- VIEW 1: OPENING / WELCOME SCREEN -->
+        <div id="view-opening" class="view-section flex flex-col items-center justify-center text-center my-auto py-6 transition-all duration-500">
+            <div class="inline-block p-4 rounded-full bg-gradient-to-br from-rose-500/20 to-purple-500/20 border border-rose-500/30 mb-6 shadow-2xl animate-float">
+                <i class="fa-solid fa-ring text-4xl text-rose-400"></i>
+            </div>
+            
+            <h1 class="font-romantic text-3xl sm:text-4xl font-bold text-white mb-1 leading-tight">
+                Alisson Gabriel Siqueira
+            </h1>
+            <div class="my-2 text-rose-500 text-2xl animate-pulse">❤️</div>
+            <h1 class="font-romantic text-3xl sm:text-4xl font-bold text-white mb-6 leading-tight">
+                Anna Patrícia Duarte Figueiredo
+            </h1>
+            
+            <div class="glass-panel px-6 py-4 rounded-2xl mb-8 max-w-xs shadow-xl border border-purple-500/20">
+                <p class="text-sm text-purple-200/90 font-light italic">
+                    "Uma história que começou em <span class="text-rose-400 font-semibold">30/08/2026</span>..."
+                </p>
+            </div>
+
+            <button onclick="enterStory()" class="glass-button w-full max-w-xs py-4 px-6 rounded-2xl text-white font-semibold text-base shadow-xl flex items-center justify-center gap-3 group">
+                <span>Entrar na nossa história</span>
+                <i class="fa-solid fa-heart text-rose-400 group-hover:scale-125 transition-transform"></i>
+            </button>
+        </div>
+
+        <!-- VIEW 2: MIDNIGHT SPECIAL EXPERIENCE (00:00 30/09/2026) -->
+        <div id="view-midnight-special" class="view-section hidden flex-col items-center justify-center text-center my-auto py-6">
+            <div class="absolute inset-0 bg-romantic-dark/95 z-20 flex flex-col items-center justify-center p-6 text-center animate-fade-in" id="midnight-overlay">
+                <div class="w-20 h-20 bg-rose-500/20 rounded-full flex items-center justify-center mx-auto mb-6 text-rose-400 text-3xl animate-bounce">
+                    <i class="fa-solid fa-star"></i>
+                </div>
+                <h2 class="font-romantic text-4xl text-white mb-3 glow-text">ANNA ❤️</h2>
+                <h3 class="font-romantic text-2xl text-pink-300 mb-6">Hoje completamos nosso primeiro mês.</h3>
+                <div class="glass-panel px-6 py-4 rounded-2xl mb-8 border border-pink-500/30">
+                    <p class="text-lg font-semibold text-rose-300 tracking-wider">30/08/2026 → 30/09/2026</p>
+                    <p class="text-xs text-purple-200/70 mt-2">O começo de para sempre.</p>
+                </div>
+                <button onclick="dismissMidnightSpecial()" class="glass-button py-3 px-8 rounded-xl text-white font-medium shadow-lg">
+                    Continuar para o Presente ❤️
+                </button>
+            </div>
+        </div>
+
+        <!-- VIEW 3: MAIN MENU -->
+        <div id="view-menu" class="view-section hidden flex-col w-full py-4">
+            <!-- Header Profile info -->
+            <div class="text-center mb-6">
+                <span class="text-xs uppercase tracking-widest text-purple-400 font-medium bg-purple-950/60 px-3 py-1 rounded-full border border-purple-500/20">
+                    Nosso Primeiro Capítulo
+                </span>
+                <h2 class="font-romantic text-2xl text-white mt-3">Alisson & Anna</h2>
+                <p class="text-xs text-purple-200/60 mt-1">1 Mês de Namoro • 30/08/2026</p>
+            </div>
+
+            <!-- Pre-midnight Countdown banner (if before midnight 30/09/2026) -->
+            <div id="countdown-banner" class="glass-panel p-4 rounded-2xl mb-6 border border-rose-500/30 text-center relative overflow-hidden">
+                <div class="absolute top-0 right-0 transform translate-x-2 -translate-y-2 opacity-10 text-6xl text-rose-400">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+                <p class="text-xs text-rose-300 font-medium mb-1">Surpresa Especial de 1 Mês em:</p>
+                <div id="countdown-timer" class="text-xl font-bold font-mono text-white tracking-widest">
+                    00:00:00
+                </div>
+                <button onclick="triggerMidnightSpecialModal()" class="mt-2 text-xs text-pink-300 underline hover:text-white transition-colors">
+                    Ver prévia da surpresa ✨
+                </button>
+            </div>
+
+            <!-- Menu Grid -->
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                <button onclick="navigateTo('story')" class="glass-panel p-4 rounded-2xl text-left hover:border-pink-500/50 transition-all flex flex-col justify-between group">
+                    <div class="w-9 h-9 rounded-xl bg-rose-500/20 flex items-center justify-center text-rose-400 mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-sm text-white">Nossa História</h3>
+                        <p class="text-[10px] text-purple-200/60 mt-0.5">Como tudo começou</p>
+                    </div>
+                </button>
+
+                <button onclick="navigateTo('time')" class="glass-panel p-4 rounded-2xl text-left hover:border-pink-500/50 transition-all flex flex-col justify-between group">
+                    <div class="w-9 h-9 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-hourglass-half"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-sm text-white">Nosso Tempo</h3>
+                        <p class="text-[10px] text-purple-200/60 mt-0.5">Contador em tempo real</p>
+                    </div>
+                </button>
+
+                <button onclick="navigateTo('letter')" class="glass-panel p-4 rounded-2xl text-left hover:border-pink-500/50 transition-all flex flex-col justify-between group">
+                    <div class="w-9 h-9 rounded-xl bg-pink-500/20 flex items-center justify-center text-pink-400 mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-envelope-open-text"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-sm text-white">Carta Para Você</h3>
+                        <p class="text-[10px] text-purple-200/60 mt-0.5">Palavras do coração</p>
+                    </div>
+                </button>
+
+                <button onclick="navigateTo('moments')" class="glass-panel p-4 rounded-2xl text-left hover:border-pink-500/50 transition-all flex flex-col justify-between group">
+                    <div class="w-9 h-9 rounded-xl bg-rose-500/20 flex items-center justify-center text-rose-400 mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-images"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-sm text-white">Nossos Momentos</h3>
+                        <p class="text-[10px] text-purple-200/60 mt-0.5">Galeria de memórias</p>
+                    </div>
+                </button>
+
+                <button onclick="navigateTo('thirty')" class="glass-panel p-4 rounded-2xl text-left hover:border-pink-500/50 transition-all flex flex-col justify-between group">
+                    <div class="w-9 h-9 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400 mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-calendar-days"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-sm text-white">30 Dias</h3>
+                        <p class="text-[10px] text-purple-200/60 mt-0.5">Cada segundo conta</p>
+                    </div>
+                </button>
+
+                <button onclick="navigateTo('feelings')" class="glass-panel p-4 rounded-2xl text-left hover:border-pink-500/50 transition-all flex flex-col justify-between group">
+                    <div class="w-9 h-9 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400 mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-sm text-white">O Que Eu Sinto</h3>
+                        <p class="text-[10px] text-purple-200/60 mt-0.5">Declarações e carinho</p>
+                    </div>
+                </button>
+
+                <button onclick="navigateTo('music')" class="glass-panel p-4 rounded-2xl text-left hover:border-pink-500/50 transition-all flex flex-col justify-between group">
+                    <div class="w-9 h-9 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400 mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-music"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-sm text-white">Nossa Música</h3>
+                        <p class="text-[10px] text-purple-200/60 mt-0.5">A trilha do nosso amor</p>
+                    </div>
+                </button>
+
+                <button onclick="navigateTo('dreams')" class="glass-panel p-4 rounded-2xl text-left hover:border-pink-500/50 transition-all flex flex-col justify-between group">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-sm text-white">Nossos Sonhos</h3>
+                        <p class="text-[10px] text-purple-200/60 mt-0.5">O futuro ao seu lado</p>
+                    </div>
+                </button>
+
+                <button onclick="navigateTo('surprise')" class="glass-panel p-4 rounded-2xl text-left hover:border-pink-500/50 transition-all flex flex-col justify-between group col-span-2 bg-gradient-to-r from-rose-950/40 to-purple-950/40 border border-rose-500/30">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-rose-500/30 flex items-center justify-center text-rose-300">
+                                <i class="fa-solid fa-gift"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-sm text-white">Uma Surpresa Especial</h3>
+                                <p class="text-[10px] text-rose-300/80 mt-0.5">Toque aqui para ver algo incrível ✨</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-rose-400 text-xs"></i>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Footer Links / Actions -->
+            <div class="flex items-center justify-between px-2 pt-2 border-t border-purple-500/20 text-xs text-purple-300/70">
+                <button onclick="navigateTo('forever')" class="hover:text-white transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-infinity text-rose-400"></i> Para Sempre
+                </button>
+                <button onclick="shareApp()" class="hover:text-white transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-share-nodes text-purple-400"></i> Compartilhar
+                </button>
+                <button onclick="restartExperience()" class="hover:text-white transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-rotate-left text-pink-400"></i> Recomeçar
+                </button>
+            </div>
+        </div>
+
+        <!-- VIEW 4: OUR STORY (TIMELINE) -->
+        <div id="view-story" class="view-section hidden flex-col w-full py-4">
+            <div class="flex items-center justify-between mb-6">
+                <button onclick="goBackToMenu()" class="glass-button px-3 py-1.5 rounded-xl text-xs text-purple-200 flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Voltar ao menu
+                </button>
+                <h2 class="font-romantic text-lg text-white">Nossa História</h2>
+                <div class="w-16"></div>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl mb-6 text-center border border-pink-500/30">
+                <span class="text-xs uppercase tracking-widest text-rose-400 font-semibold">Como tudo começou</span>
+                <h3 class="font-romantic text-2xl text-white mt-2 mb-1">30 de agosto de 2026</h3>
+                <div class="w-12 h-0.5 bg-rose-500 mx-auto my-3"></div>
+                <p class="text-sm text-purple-200/90 leading-relaxed text-left font-light mb-4">
+                    Exatamente neste dia, nossas vidas se cruzaram de uma forma especial. Mesmo com a distância, as pequenas brigas, as dificuldades do dia a dia e os momentos complicados que tentaram testar a gente, continuamos escolhendo um ao outro todos os dias. 
+                </p>
+                <p class="text-sm text-purple-200/90 leading-relaxed text-left font-light">
+                    Cada obstáculo superado só provou o quanto o nosso sentimento é real e forte. Este é apenas o primeiro capítulo da nossa linda história.
+                </p>
+            </div>
+
+            <!-- Interactive Timeline / Add Moment -->
+            <div class="glass-panel p-5 rounded-2xl mb-6 border border-purple-500/20">
+                <h4 class="text-xs font-semibold text-rose-300 uppercase tracking-widest mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-timeline"></i> Linha do Tempo de Momentos
+                </h4>
+                
+                <div id="timeline-container" class="space-y-4 mb-4 relative before:absolute before:inset-0 before:left-3 before:w-0.5 before:bg-purple-500/30">
+                    <!-- Timeline items generated dynamically -->
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-purple-500/20">
+                    <p class="text-xs text-purple-300/80 mb-2">Adicionar novo marco importante:</p>
+                    <input type="text" id="timeline-title" placeholder="Ex: Nossa primeira chamada de vídeo" class="w-full bg-romantic-dark/85 border border-purple-500/30 rounded-xl px-3 py-2 text-xs text-white placeholder-purple-400/50 mb-2 focus:outline-none focus:border-pink-500">
+                    <input type="date" id="timeline-date" class="w-full bg-romantic-dark/85 border border-purple-500/30 rounded-xl px-3 py-2 text-xs text-white mb-2 focus:outline-none focus:border-pink-500">
+                    <button onclick="addTimelineItem()" class="glass-button w-full py-2.5 rounded-xl text-xs text-white font-medium">
+                        Adicionar à Linha do Tempo ❤️
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 5: OUR TIME (COUNTER) -->
+        <div id="view-time" class="view-section hidden flex-col w-full py-4 text-center">
+            <div class="flex items-center justify-between mb-6">
+                <button onclick="goBackToMenu()" class="glass-button px-3 py-1.5 rounded-xl text-xs text-purple-200 flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Voltar ao menu
+                </button>
+                <h2 class="font-romantic text-lg text-white">Nosso Tempo</h2>
+                <div class="w-16"></div>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl mb-6 border border-pink-500/30 shadow-xl relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 opacity-5 text-9xl text-rose-400">
+                    <i class="fa-solid fa-heart"></i>
+                </div>
+                <h3 class="font-romantic text-xl text-pink-200 mb-2">Estamos juntos há...</h3>
+                <p class="text-xs text-purple-300/60 mb-6">Desde 30 de agosto de 2026</p>
+
+                <div class="grid grid-cols-2 gap-3 mb-6">
+                    <div class="bg-purple-950/50 p-4 rounded-xl border border-purple-500/20">
+                        <span id="counter-days" class="text-3xl font-bold font-mono text-white">0</span>
+                        <p class="text-xs text-purple-300 uppercase tracking-wider mt-1">Dias</p>
+                    </div>
+                    <div class="bg-purple-950/50 p-4 rounded-xl border border-purple-500/20">
+                        <span id="counter-hours" class="text-3xl font-bold font-mono text-white">0</span>
+                        <p class="text-xs text-purple-300 uppercase tracking-wider mt-1">Horas</p>
+                    </div>
+                    <div class="bg-purple-950/50 p-4 rounded-xl border border-purple-500/20">
+                        <span id="counter-minutes" class="text-3xl font-bold font-mono text-white">0</span>
+                        <p class="text-xs text-purple-300 uppercase tracking-wider mt-1">Minutos</p>
+                    </div>
+                    <div class="bg-purple-950/50 p-4 rounded-xl border border-purple-500/20">
+                        <span id="counter-seconds" class="text-3xl font-bold font-mono text-white">0</span>
+                        <p class="text-xs text-purple-300 uppercase tracking-wider mt-1">Segundos</p>
+                    </div>
+                </div>
+
+                <div class="py-3 px-4 bg-gradient-to-r from-rose-900/30 to-purple-900/30 rounded-xl border border-rose-500/20">
+                    <p class="font-romantic text-lg text-rose-300">1 mês de nós ❤️</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 6: LETTER FOR YOU -->
+        <div id="view-letter" class="view-section hidden flex-col w-full py-4">
+            <div class="flex items-center justify-between mb-6">
+                <button onclick="goBackToMenu()" class="glass-button px-3 py-1.5 rounded-xl text-xs text-purple-200 flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Voltar ao menu
+                </button>
+                <h2 class="font-romantic text-lg text-white">Carta Para Você</h2>
+                <div class="w-16"></div>
+            </div>
+
+            <!-- Envelope Animation State / Letter Paper -->
+            <div id="letter-envelope-box" class="glass-panel p-8 rounded-2xl text-center mb-6 border border-pink-500/30 transition-all">
+                <div id="envelope-closed" class="py-8">
+                    <div class="w-16 h-16 bg-rose-500/20 rounded-full flex items-center justify-center mx-auto mb-4 text-rose-400 text-2xl animate-bounce">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                    <h3 class="font-romantic text-xl text-white mb-2">Uma carta especial para a Anna</h3>
+                    <p class="text-xs text-purple-200/70 mb-6">Escrita com todo o carinho pelo Alisson</p>
+                    <button onclick="openLetterAnimation()" class="glass-button py-3 px-6 rounded-xl text-white font-medium text-xs shadow-lg">
+                        Abrir Carta ❤️
+                    </button>
+                </div>
+
+                <div id="letter-opened" class="hidden text-left space-y-4 animate-fade-in">
+                    <div class="flex items-center justify-between border-b border-purple-500/20 pb-3">
+                        <span class="font-romantic text-lg text-rose-300">Meu amor,</span>
+                        <span class="text-[10px] text-purple-400">30/09/2026</span>
+                    </div>
+                    
+                    <p class="text-xs text-purple-200/90 leading-relaxed font-light">
+                        Anna, você chegou em uma fase um pouco difícil e desafiadora da minha vida, mas a sua leveza mudou tudo. Você trouxe cor, paz e um motivo sincero para sorrir todos os dias.
+                    </p>
+                    <p class="text-xs text-purple-200/90 leading-relaxed font-light">
+                        Eu sei que nem sempre tudo é perfeito, que tivemos nossas brigas, distâncias e momentos complicados, mas o que mais me orgulha é que, no final de cada dia, nós continuamos escolhendo ficar juntos.
+                    </p>
+                    <p class="text-xs text-purple-200/90 leading-relaxed font-light">
+                        Eu amo muito você, amo o seu jeito, o seu carinho e a forma como a minha vida é melhor com a sua presença. Espero viver muitos e muitos meses e anos ao seu lado.
+                    </p>
+
+                    <div class="pt-4 border-t border-purple-500/20 text-right">
+                        <p class="text-xs text-rose-300 font-medium">Feliz 1 mês, meu amor.</p>
+                        <p class="text-xs text-rose-300 font-medium mb-1">Eu te amo, Anna. ❤️</p>
+                        <p class="font-script text-2xl text-pink-400 mt-2">— Alisson</p>
+                    </div>
+
+                    <button onclick="closeLetterAnimation()" class="w-full mt-4 py-2 bg-purple-950/60 hover:bg-purple-900/60 text-xs text-purple-300 rounded-xl transition-colors">
+                        Fechar envelope
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 7: OUR MOMENTS (GALLERY) -->
+        <div id="view-moments" class="view-section hidden flex-col w-full py-4">
+            <div class="flex items-center justify-between mb-6">
+                <button onclick="goBackToMenu()" class="glass-button px-3 py-1.5 rounded-xl text-xs text-purple-200 flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Voltar ao menu
+                </button>
+                <h2 class="font-romantic text-lg text-white">Nossos Momentos</h2>
+                <div class="w-16"></div>
+            </div>
+
+            <div class="glass-panel p-4 rounded-2xl mb-4 border border-purple-500/20">
+                <p class="text-xs text-purple-200/80 mb-3">Galeria de memórias do casal. Adicione suas fotos favoritas!</p>
+                <div class="grid grid-cols-2 gap-3" id="gallery-container">
+                    <!-- Gallery items generated dynamically -->
+                </div>
+            </div>
+
+            <div class="glass-panel p-4 rounded-2xl border border-purple-500/20">
+                <h4 class="text-xs font-semibold text-rose-300 uppercase tracking-widest mb-3">Adicionar Nova Foto</h4>
+                <input type="text" id="photo-url" placeholder="URL da imagem (ex: https://...)" class="w-full bg-romantic-dark/85 border border-purple-500/30 rounded-xl px-3 py-2 text-xs text-white placeholder-purple-400/50 mb-2 focus:outline-none focus:border-pink-500">
+                <input type="text" id="photo-caption" placeholder="Legenda ou data (ex: 30/08 - Nosso primeiro encontro)" class="w-full bg-romantic-dark/85 border border-purple-500/30 rounded-xl px-3 py-2 text-xs text-white placeholder-purple-400/50 mb-2 focus:outline-none focus:border-pink-500">
+                <button onclick="addPhotoItem()" class="glass-button w-full py-2.5 rounded-xl text-xs text-white font-medium">
+                    Salvar na Galeria 📸
+                </button>
+            </div>
+        </div>
+
+        <!-- VIEW 8: THIRTY DAYS -->
+        <div id="view-thirty" class="view-section hidden flex-col w-full py-4 text-center">
+            <div class="flex items-center justify-between mb-6">
+                <button onclick="goBackToMenu()" class="glass-button px-3 py-1.5 rounded-xl text-xs text-purple-200 flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Voltar ao menu
+                </button>
+                <h2 class="font-romantic text-lg text-white">30 Dias</h2>
+                <div class="w-16"></div>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl mb-6 border border-pink-500/30 shadow-xl space-y-4">
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-purple-950/60 p-4 rounded-xl border border-purple-500/20">
+                        <span class="text-2xl font-bold font-mono text-rose-400">30</span>
+                        <p class="text-xs text-purple-300 mt-1 uppercase">Dias</p>
+                    </div>
+                    <div class="bg-purple-950/60 p-4 rounded-xl border border-purple-500/20">
+                        <span class="text-2xl font-bold font-mono text-rose-400" id="stat-hours">720</span>
+                        <p class="text-xs text-purple-300 mt-1 uppercase">Horas</p>
+                    </div>
+                    <div class="bg-purple-950/60 p-4 rounded-xl border border-purple-500/20">
+                        <span class="text-2xl font-bold font-mono text-rose-400" id="stat-minutes">43.200</span>
+                        <p class="text-xs text-purple-300 mt-1 uppercase">Minutos</p>
+                    </div>
+                    <div class="bg-purple-950/60 p-4 rounded-xl border border-purple-500/20">
+                        <span class="text-2xl font-bold font-mono text-rose-400" id="stat-seconds">2.592.000</span>
+                        <p class="text-xs text-purple-300 mt-1 uppercase">Segundos</p>
+                    </div>
+                </div>
+
+                <div class="py-4 px-6 bg-gradient-to-r from-rose-950/50 to-purple-950/50 rounded-2xl border border-rose-500/30">
+                    <p class="font-romantic text-xl text-white italic">
+                        "E eu escolheria você em cada um deles."
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 9: WHAT I FEEL (CARDS) -->
+        <div id="view-feelings" class="view-section hidden flex-col w-full py-4">
+            <div class="flex items-center justify-between mb-6">
+                <button onclick="goBackToMenu()" class="glass-button px-3 py-1.5 rounded-xl text-xs text-purple-200 flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Voltar ao menu
+                </button>
+                <h2 class="font-romantic text-lg text-white">O Que Eu Sinto</h2>
+                <div class="w-16"></div>
+            </div>
+
+            <p class="text-xs text-purple-300/80 mb-4 text-center">Toque em cada cartão para ver uma mensagem especial:</p>
+
+            <div class="space-y-3" id="feelings-cards-container">
+                <!-- Generated dynamically or listed -->
+            </div>
+        </div>
+
+        <!-- VIEW 10: OUR MUSIC -->
+        <div id="view-music" class="view-section hidden flex-col w-full py-4 text-center">
+            <div class="flex items-center justify-between mb-6">
+                <button onclick="goBackToMenu()" class="glass-button px-3 py-1.5 rounded-xl text-xs text-purple-200 flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Voltar ao menu
+                </button>
+                <h2 class="font-romantic text-lg text-white">Nossa Música</h2>
+                <div class="w-16"></div>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl mb-6 border border-pink-500/30 shadow-xl">
+                <div class="w-20 h-20 bg-gradient-to-br from-rose-500/20 to-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-rose-500/30 animate-spin-slow">
+                    <i class="fa-solid fa-compact-disc text-3xl text-rose-400"></i>
+                </div>
+                
+                <h3 class="font-romantic text-xl text-white mb-1">Nossa Canção</h3>
+                <p class="text-xs text-rose-300 mb-6">"Essa música me lembra você ❤️"</p>
+
+                <div class="flex items-center justify-center gap-4 mb-6">
+                    <button onclick="toggleMusic()" class="w-12 h-12 rounded-full bg-gradient-to-r from-rose-600 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-rose-900/40 hover:scale-105 transition-transform">
+                        <i id="player-main-icon" class="fa-solid fa-play"></i>
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-3 bg-purple-950/50 p-3 rounded-xl border border-purple-500/20">
+                    <i class="fa-solid fa-volume-high text-xs text-purple-300"></i>
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5" onchange="changeVolume(this.value)" class="w-full accent-rose-500 cursor-pointer">
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 11: OUR DREAMS -->
+        <div id="view-dreams" class="view-section hidden flex-col w-full py-4">
+            <div class="flex items-center justify-between mb-6">
+                <button onclick="goBackToMenu()" class="glass-button px-3 py-1.5 rounded-xl text-xs text-purple-200 flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Voltar ao menu
+                </button>
+                <h2 class="font-romantic text-lg text-white">Nossos Sonhos</h2>
+                <div class="w-16"></div>
+            </div>
+
+            <div class="glass-panel p-4 rounded-2xl mb-4 border border-purple-500/20">
+                <p class="text-xs text-purple-200/80 mb-3">Sonhos e planos futuros que queremos realizar juntos:</p>
+                <div class="space-y-2.5 mb-4" id="dreams-container">
+                    <!-- Dreams generated dynamically -->
+                </div>
+            </div>
+
+            <div class="glass-panel p-4 rounded-2xl border border-purple-500/20">
+                <h4 class="text-xs font-semibold text-rose-300 uppercase tracking-widest mb-3">Adicionar Novo Sonho</h4>
+                <input type="text" id="dream-input" placeholder="Ex: ✈️ Viajar para a praia juntos" class="w-full bg-romantic-dark/85 border border-purple-500/30 rounded-xl px-3 py-2 text-xs text-white placeholder-purple-400/50 mb-2 focus:outline-none focus:border-pink-500">
+                <button onclick="addDreamItem()" class="glass-button w-full py-2.5 rounded-xl text-xs text-white font-medium">
+                    Adicionar Sonho ✨
+                </button>
+            </div>
+        </div>
+
+        <!-- VIEW 12: A SURPRISE -->
+        <div id="view-surprise" class="view-section hidden flex-col w-full py-4 text-center">
+            <div class="flex items-center justify-between mb-6">
+                <button onclick="goBackToMenu()" class="glass-button px-3 py-1.5 rounded-xl text-xs text-purple-200 flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Voltar ao menu
+                </button>
+                <h2 class="font-romantic text-lg text-white">Uma Surpresa</h2>
+                <div class="w-16"></div>
+            </div>
+
+            <div id="surprise-box-initial" class="glass-panel p-6 rounded-2xl border border-pink-500/30 shadow-xl my-auto">
+                <div class="w-16 h-16 bg-rose-500/20 rounded-full flex items-center justify-center mx-auto mb-4 text-rose-400 text-2xl animate-pulse">
+                    <i class="fa-solid fa-gift"></i>
+                </div>
+                <h3 class="font-romantic text-xl text-white mb-3">Tem uma última coisa que eu quero te mostrar...</h3>
+                <p class="text-xs text-purple-200/70 mb-6">Preparada para ler algo vindo direto do meu coração?</p>
+                <button onclick="revealSurpriseSequence()" class="glass-button py-3 px-6 rounded-xl text-white font-medium text-xs shadow-lg">
+                    Revelar Surpresa ✨
+                </button>
+            </div>
+
+            <div id="surprise-box-revealed" class="hidden glass-panel p-6 rounded-2xl border border-pink-500/30 shadow-xl text-left space-y-4 animate-fade-in">
+                <div class="text-center pb-3 border-b border-purple-500/20">
+                    <span class="font-romantic text-xl text-rose-300">Anna,</span>
+                </div>
+                
+                <p class="text-xs text-purple-200/90 leading-relaxed font-light">
+                    Se eu pudesse voltar para o dia 30/08/2026, eu escolheria você novamente, sem hesitar um segundo sequer.
+                </p>
+                <p class="text-xs text-purple-200/90 leading-relaxed font-light">
+                    Obrigado por fazer parte da minha vida, por cuidar de mim e por estar ao meu lado em cada momento.
+                </p>
+                <p class="text-xs text-purple-200/90 leading-relaxed font-light">
+                    Esse é apenas o primeiro mês de uma história que eu espero que dure por muitos e muitos anos.
+                </p>
+                <p class="text-xs text-purple-200/90 leading-relaxed font-light">
+                    Eu te amo. ❤️
+                </p>
+
+                <div class="pt-3 border-t border-purple-500/20 text-right">
+                    <p class="font-script text-2xl text-pink-400">— Alisson</p>
+                </div>
+
+                <button onclick="resetSurprise()" class="w-full mt-3 py-2 bg-purple-950/60 hover:bg-purple-900/60 text-xs text-purple-300 rounded-xl transition-colors">
+                    Ocultar surpresa
+                </button>
+            </div>
+        </div>
+
+        <!-- VIEW 13: FOREVER (FINAL SCREEN) -->
+        <div id="view-forever" class="view-section hidden flex-col w-full py-4 text-center my-auto">
+            <div class="flex items-center justify-between mb-6">
+                <button onclick="goBackToMenu()" class="glass-button px-3 py-1.5 rounded-xl text-xs text-purple-200 flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left"></i> Voltar ao menu
+                </button>
+                <h2 class="font-romantic text-lg text-white">Para Sempre</h2>
+                <div class="w-16"></div>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl border border-pink-500/30 shadow-xl space-y-4">
+                <div class="w-16 h-16 bg-rose-500/20 rounded-full flex items-center justify-center mx-auto mb-2 text-rose-400 text-2xl">
+                    <i class="fa-solid fa-infinity"></i>
+                </div>
+                
+                <h3 class="font-romantic text-2xl text-white">Obrigado por viver essa história comigo.</h3>
+                
+                <div class="py-2">
+                    <p class="text-sm font-semibold text-rose-300">Alisson ❤️ Anna</p>
+                    <p class="text-xs text-purple-300/70 mt-1">30/08/2026</p>
+                </div>
+
+                <div class="pt-3 border-t border-purple-500/20">
+                    <p class="font-romantic text-base text-pink-200 italic">"Nosso primeiro capítulo."</p>
+                </div>
+
+                <button onclick="restartExperience()" class="glass-button w-full py-3 rounded-xl text-xs text-white font-medium mt-4">
+                    Recomeçar Experiência ❤️
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Branding -->
+    <footer class="w-full text-center py-4 relative z-10 text-[10px] text-purple-300/40">
+        Feito com todo amor pelo Alisson para a Anna ✨
+    </footer>
+
+    <!-- Fullscreen Photo Modal Viewer -->
+    <div id="photo-modal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 hidden" onclick="closePhotoModal()">
+        <div class="relative max-w-sm w-full glass-panel p-3 rounded-2xl text-center" onclick="event.stopPropagation()">
+            <img id="modal-img-src" src="" alt="Foto" class="w-full h-72 object-cover rounded-xl mb-3">
+            <p id="modal-img-caption" class="text-xs text-purple-200 mb-3"></p>
+            <button onclick="closePhotoModal()" class="w-full py-2 bg-rose-600/80 text-white rounded-xl text-xs font-medium">Fechar</button>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        const APP_DATA_KEY = "alisson_anna_anniversary_data_v1";
+
+        let defaultData = {
+            timeline: [
+                { title: "Nosso primeiro contato", date: "2026-08-15", desc: "Quando começamos a conversar e percebi que você era diferente." },
+                { title: "Início do nosso namoro", date: "2026-08-30", desc: "O dia em que decidimos oficializar o que já sentíamos um pelo outro." }
+            ],
+            photos: [
+                { url: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500&auto=format&fit=crop&q=60", caption: "30/08 - O início de tudo ❤️" },
+                { url: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=500&auto=format&fit=crop&q=60", caption: "Momentos de carinho e risadas" },
+                { url: "https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=500&auto=format&fit=crop&q=60", caption: "Escolhendo ficar juntos" },
+                { url: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=500&auto=format&fit=crop&q=60", caption: "Nosso primeiro mês juntos ✨" }
+            ],
+            dreams: [
+                { text: "🏠 Nossa casa própria decorada com o nosso jeitinho", done: false },
+                { text: "✈️ Nossa primeira viagem inesquecível juntos", done: false },
+                { text: "💍 Construir um futuro lindo e duradouro", done: false },
+                { text: "❤️ Vivenciar muitos e muitos meses e anos de amor", done: false },
+                { text: "🌎 Conhecer novos lugares e criar memórias", done: false }
+            ],
+            feelings: [
+                { title: "Eu amo seu jeito ❤️", desc: "O seu jeito único de ser me encanta todos os dias e faz qualquer momento difícil parecer simples." },
+                { title: "Eu amo quando você sorri ❤️", desc: "O seu sorriso tem o poder de iluminar o meu dia inteiro, mesmo nos momentos mais corridos." },
+                { title: "Eu amo ter você na minha vida ❤️", desc: "Você trouxe uma paz e uma leveza indescritíveis para a minha rotina. Não me imagino sem você." },
+                { title: "Eu amo nossos momentos ❤️", desc: "Seja conversando por horas ou em silêncio, cada instante ao seu lado é o meu favorito." },
+                { title: "Eu amo que, mesmo com dificuldades, ainda estamos aqui ❤️", desc: "Superamos barreiras porque o que sentimos é verdadeiro e vale a pena lutar todos os dias." }
+            ]
+        };
+
+        let appState = JSON.parse(localStorage.getItem(APP_DATA_KEY)) || defaultData;
+
+        function saveAppData() {
+            localStorage.setItem(APP_DATA_KEY, JSON.stringify(appState));
+        }
+
+        function createHeartParticle() {
+            const container = document.getElementById('hearts-container');
+            if (!container) return;
+            const heart = document.createElement('div');
+            heart.classList.add('heart-particle');
+            heart.innerHTML = '<i class="fa-solid fa-heart"></i>';
+            
+            const size = Math.floor(Math.random() * 16) + 10; // 10px to 25px
+            const leftPos = Math.random() * 100; // 0% to 100%
+            const duration = Math.random() * 6 + 6; // 6s to 12s
+            const colors = ['text-rose-500', 'text-pink-400', 'text-purple-400', 'text-rose-300'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            
+            heart.style.left = leftPos + 'vw';
+            heart.style.fontSize = size + 'px';
+            heart.className += ` absolute ${randomColor}`;
+            heart.style.animationDuration = duration + 's';
+            
+            container.appendChild(heart);
+            setTimeout(() => {
+                heart.remove();
+            }, duration * 1000);
+        }
+
+        setInterval(createHeartParticle, 900);
+
+        window.addEventListener('DOMContentLoaded', () => {
+            // Simulate loading bar
+            let progress = 0;
+            const loadingBar = document.getElementById('loading-bar');
+            const loadingScreen = document.getElementById('loading-screen');
+            
+            const interval = setInterval(() => {
+                progress += 25;
+                loadingBar.style.width = progress + '%';
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        loadingScreen.style.opacity = '0';
+                        setTimeout(() => loadingScreen.style.display = 'none', 700);
+                        checkMidnightSpecialCondition();
+                    }, 400);
+                }
+            }, 200);
+
+            // Start Realtime Counter
+            setInterval(updateTimeCounter, 1000);
+            updateTimeCounter();
+
+            // Render Dynamic Lists
+            renderTimeline();
+            renderGallery();
+            renderDreams();
+            renderFeelings();
+        });
+
+        function navigateTo(viewId) {
+            const views = document.querySelectorAll('.view-section');
+            views.forEach(v => {
+                v.classList.add('hidden');
+                v.classList.remove('flex');
+            });
+
+            const targetView = document.getElementById('view-' + viewId);
+            if (targetView) {
+                targetView.classList.remove('hidden');
+                targetView.classList.add('flex');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function enterStory() {
+            navigateTo('menu');
+        }
+
+        function goBackToMenu() {
+            navigateTo('menu');
+        }
+
+        function restartExperience() {
+            navigateTo('opening');
+        }
+
+        function shareApp() {
+            const shareText = "Alisson & Anna - Nosso Primeiro Mês de Namoro ❤️ (30/08/2026)";
+            if (navigator.share) {
+                navigator.share({ title: 'Alisson & Anna', text: shareText, url: window.location.href }).catch(() => {});
+            } else {
+                const dummy = document.createElement('textarea');
+                document.body.appendChild(dummy);
+                dummy.value = window.location.href;
+                dummy.select();
+                document.execCommand('copy');
+                document.body.removeChild(dummy);
+                showModal("Link copiado!", "Link do nosso aplicativo copiado para a área de transferência.");
+            }
+        }
+
+        const startDate = new Date('2026-08-30T00:00:00');
+
+        function updateTimeCounter() {
+            const now = new Date();
+            const diff = now - startDate;
+
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((diff / 1000 / 60) % 60);
+                const seconds = Math.floor((diff / 1000) % 60);
+
+                const elDays = document.getElementById('counter-days');
+                const elHours = document.getElementById('counter-hours');
+                const elMinutes = document.getElementById('counter-minutes');
+                const elSeconds = document.getElementById('counter-seconds');
+
+                if (elDays) elDays.innerText = days;
+                if (elHours) elHours.innerText = hours;
+                if (elMinutes) elMinutes.innerText = minutes;
+                if (elSeconds) elSeconds.innerText = seconds;
+            }
+
+            // Countdown to 30/09/2026 00:00:00 local time
+            const targetMidnight = new Date('2026-09-30T00:00:00');
+            const diffMidnight = targetMidnight - now;
+
+            const countdownTimerEl = document.getElementById('countdown-timer');
+            if (countdownTimerEl) {
+                if (diffMidnight > 0) {
+                    const cDays = Math.floor(diffMidnight / (1000 * 60 * 60 * 24));
+                    const cHours = Math.floor((diffMidnight / (1000 * 60 * 60)) % 24);
+                    const cMinutes = Math.floor((diffMidnight / 1000 / 60) % 60);
+                    const cSeconds = Math.floor((diffMidnight / 1000) % 60);
+                    countdownTimerEl.innerText = `${String(cHours).padStart(2, '0')}:${String(cMinutes).padStart(2, '0')}:${String(cSeconds).padStart(2, '0')}`;
+                } else {
+                    countdownTimerEl.innerText = "00:00:00 (Já chegou! ❤️)";
+                }
+            }
+        }
+
+        function checkMidnightSpecialCondition() {
+            const now = new Date();
+            const targetMidnight = new Date('2026-09-30T00:00:00');
+            // If current time is past 30/09/2026 00:00 (or user clicks modal preview)
+            if (now >= targetMidnight) {
+                // Auto trigger midnight special overlay once
+                if (!sessionStorage.getItem('midnight_shown')) {
+                    sessionStorage.setItem('midnight_shown', 'true');
+                    // We can show the midnight special view or modal
+                }
+            }
+        }
+
+        function triggerMidnightSpecialModal() {
+            const midnightView = document.getElementById('view-midnight-special');
+            midnightView.classList.remove('hidden');
+            midnightView.classList.add('flex');
+        }
+
+        function dismissMidnightSpecial() {
+            const midnightView = document.getElementById('view-midnight-special');
+            midnightView.classList.add('hidden');
+            midnightView.classList.remove('flex');
+            navigateTo('menu');
+        }
+
+        let isPlaying = false;
+        const bgAudio = document.getElementById('bg-audio');
+
+        function toggleMusic() {
+            if (!bgAudio) return;
+            const musicText = document.getElementById('music-text');
+            const musicIcon = document.getElementById('music-icon');
+            const playerMainIcon = document.getElementById('player-main-icon');
+
+            if (isPlaying) {
+                bgAudio.pause();
+                isPlaying = false;
+                if (musicText) musicText.innerText = "Música: Off";
+                if (musicIcon) musicIcon.className = "fa-solid fa-music text-pink-400";
+                if (playerMainIcon) playerMainIcon.className = "fa-solid fa-play";
+            } else {
+                bgAudio.play().then(() => {
+                    isPlaying = true;
+                    if (musicText) musicText.innerText = "Música: On";
+                    if (musicIcon) musicIcon.className = "fa-solid fa-music text-rose-400 animate-bounce";
+                    if (playerMainIcon) playerMainIcon.className = "fa-solid fa-pause";
+                }).catch(err => {
+                    showModal("Aviso de Áudio", "Toque na tela ou interaja com a página para ativar a reprodução da música romântica.");
+                });
+            }
+        }
+
+        function changeVolume(val) {
+            if (bgAudio) {
+                bgAudio.volume = parseFloat(val);
+            }
+        }
+
+        function renderTimeline() {
+            const container = document.getElementById('timeline-container');
+            if (!container) return;
+            container.innerHTML = appState.timeline.map((item, index) => `
+                <div class="relative pl-6 ml-3 border-l-2 border-rose-500/40 pb-3">
+                    <div class="absolute -left-[7px] top-0 w-3 h-3 rounded-full bg-rose-500 ring-4 ring-romantic-dark"></div>
+                    <span class="text-[10px] text-rose-300 font-semibold">${item.date}</span>
+                    <h5 class="text-xs font-semibold text-white mt-0.5">${item.title}</h5>
+                    <p class="text-[11px] text-purple-200/80 mt-0.5 font-light">${item.desc}</p>
+                </div>
+            `).join('');
+        }
+
+        function addTimelineItem() {
+            const titleInput = document.getElementById('timeline-title');
+            const dateInput = document.getElementById('timeline-date');
+            if (!titleInput.value || !dateInput.value) {
+                showModal("Atenção", "Preencha o título e a data do momento.");
+                return;
+            }
+            appState.timeline.push({
+                title: titleInput.value,
+                date: dateInput.value,
+                desc: "Novo momento especial adicionado ao nosso capítulo."
+            });
+            saveAppData();
+            renderTimeline();
+            titleInput.value = '';
+            dateInput.value = '';
+            showModal("Sucesso", "Momento adicionado à linha do tempo com sucesso! ❤️");
+        }
+
+        function renderGallery() {
+            const container = document.getElementById('gallery-container');
+            if (!container) return;
+            container.innerHTML = appState.photos.map((photo, index) => `
+                <div class="glass-panel p-2 rounded-xl overflow-hidden cursor-pointer group" onclick="openPhotoModal('${photo.url}', '${photo.caption}')">
+                    <img src="${photo.url}" alt="${photo.caption}" onerror="this.src='https://placehold.co/300x300/160b22/f3e8ff?text=Foto+Casal'" class="w-full h-32 object-cover rounded-lg group-hover:scale-105 transition-transform">
+                    <p class="text-[10px] text-purple-200/90 mt-1.5 truncate">${photo.caption}</p>
+                </div>
+            `).join('');
+        }
+
+        function addPhotoItem() {
+            const urlInput = document.getElementById('photo-url');
+            const captionInput = document.getElementById('photo-caption');
+            if (!urlInput.value || !captionInput.value) {
+                showModal("Atenção", "Insira a URL da foto e uma legenda.");
+                return;
+            }
+            appState.photos.push({
+                url: urlInput.value,
+                caption: captionInput.value
+            });
+            saveAppData();
+            renderGallery();
+            urlInput.value = '';
+            captionInput.value = '';
+            showModal("Sucesso", "Foto adicionada à galeria com sucesso! 📸");
+        }
+
+        function openPhotoModal(url, caption) {
+            document.getElementById('modal-img-src').src = url;
+            document.getElementById('modal-img-caption').innerText = caption;
+            document.getElementById('photo-modal').classList.remove('hidden');
+        }
+
+        function closePhotoModal() {
+            document.getElementById('photo-modal').classList.add('hidden');
+        }
+
+        function renderDreams() {
+            const container = document.getElementById('dreams-container');
+            if (!container) return;
+            container.innerHTML = appState.dreams.map((dream, index) => `
+                <div class="flex items-center justify-between bg-purple-950/50 p-3 rounded-xl border border-purple-500/20">
+                    <span class="text-xs text-white">${dream.text}</span>
+                    <button onclick="toggleDream(${index})" class="text-xs ${dream.done ? 'text-emerald-400' : 'text-purple-400/60 hover:text-white'}">
+                        <i class="fa-solid ${dream.done ? 'fa-square-check text-base' : 'fa-square text-base'}"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function toggleDream(index) {
+            appState.dreams[index].done = !appState.dreams[index].done;
+            saveAppData();
+            renderDreams();
+        }
+
+        function addDreamItem() {
+            const input = document.getElementById('dream-input');
+            if (!input.value) {
+                showModal("Atenção", "Escreva um sonho para adicionar.");
+                return;
+            }
+            appState.dreams.push({ text: input.value, done: false });
+            saveAppData();
+            renderDreams();
+            input.value = '';
+            showModal("Sucesso", "Novo sonho adicionado à nossa lista! ✨");
+        }
+
+        function renderFeelings() {
+            const container = document.getElementById('feelings-cards-container');
+            if (!container) return;
+            container.innerHTML = appState.feelings.map((feeling, index) => `
+                <div class="glass-panel p-4 rounded-xl border border-purple-500/20 cursor-pointer hover:border-pink-500/50 transition-all" onclick="toggleFeelingDetail(${index})">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-xs font-semibold text-white">${feeling.title}</h4>
+                        <i id="feeling-icon-${index}" class="fa-solid fa-chevron-down text-xs text-rose-400 transition-transform"></i>
+                    </div>
+                    <p id="feeling-desc-${index}" class="text-xs text-purple-200/80 mt-2 hidden pt-2 border-t border-purple-500/10 font-light leading-relaxed">
+                        ${feeling.desc}
+                    </p>
+                </div>
+            `).join('');
+        }
+
+        function toggleFeelingDetail(index) {
+            const descEl = document.getElementById(`feeling-desc-${index}`);
+            const iconEl = document.getElementById(`feeling-icon-${index}`);
+            if (descEl.classList.contains('hidden')) {
+                descEl.classList.remove('hidden');
+                iconEl.style.transform = 'rotate(180deg)';
+            } else {
+                descEl.classList.add('hidden');
+                iconEl.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function openLetterAnimation() {
+            document.getElementById('envelope-closed').classList.add('hidden');
+            document.getElementById('letter-opened').classList.remove('hidden');
+        }
+
+        function closeLetterAnimation() {
+            document.getElementById('letter-opened').classList.add('hidden');
+            document.getElementById('envelope-closed').classList.remove('hidden');
+        }
+
+        function revealSurpriseSequence() {
+            document.getElementById('surprise-box-initial').classList.add('hidden');
+            document.getElementById('surprise-box-revealed').classList.remove('hidden');
+            // Trigger extra heart burst
+            for(let i=0; i<15; i++) {
+                setTimeout(createHeartParticle, i * 100);
+            }
+        }
+
+        function resetSurprise() {
+            document.getElementById('surprise-box-revealed').classList.add('hidden');
+            document.getElementById('surprise-box-initial').classList.remove('hidden');
+        }
+
+        function showModal(title, message) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+            const modal = document.getElementById('custom-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('custom-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+    </script>
+</body>
+</html>
